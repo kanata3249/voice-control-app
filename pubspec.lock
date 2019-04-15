@@ -154,10 +154,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d527d13d16c2a9cd001bf14a4372ec74c69f72b2
-      url: "git://github.com/rxlabz/speech_recognition.git"
+      resolved-ref: "3c73fbeb2b37065a3a95497820aa41d42960def4"
+      url: "git://github.com/alescdb/speech_recognition.git"
     source: git
-    version: "0.3.0+1"
+    version: "0.2.0+1"
   stack_trace:
     dependency: transitive
     description:

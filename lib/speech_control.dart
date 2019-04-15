@@ -1,5 +1,5 @@
 import 'package:speech_recognition/speech_recognition.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 typedef void StringCallback(String value);
 
@@ -14,10 +14,10 @@ class SpeechControl {
   StringCallback onRecognitionCompleted = (String text) => {};
 
   requestPermission() async {
-    final PermissionStatus res = await SimplePermissions.requestPermission(Permission.RecordAudio);
-    if (res == PermissionStatus.deniedNeverAsk) {
-      SimplePermissions.openSettings();
-    }
+    final Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.microphone]);
+//    if (permissions[PermissionGroup.microphone] == PermissionStatus.deniedNeverAsk) {
+//      SimplePermissions.openSettings();
+//    }
   }
 
   void init() {

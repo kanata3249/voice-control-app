@@ -26,7 +26,7 @@ dependencies:
   dio: ^2.1.2
   shared_preferences: ^0.5.2
   material_design_icons_flutter: ^3.2.3595
-  simple_permissions: ^0.1.9
+  permission_handler: ^3.0.0
   battery: ^0.3.0
   screen: ^0.0.5
   qrcode_reader: ^0.4.4

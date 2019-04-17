@@ -36,12 +36,16 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>s
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
- <key>NSMicrophoneUsageDescription</key>
- <string>Your prompt</string>
+ <key>NSCameraUsageDescription</key>
+ <string>This application uses your camera as QR code reader</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>This application needs to access your microphone</string>
+<key>NSSpeechRecognitionUsageDescription</key>
+<string>This application needs the speech recognition permission</string>
 </dict>
 </plist>

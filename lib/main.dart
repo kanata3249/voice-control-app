@@ -10,6 +10,8 @@ import 'package:screen/screen.dart';
 import 'preferences.dart';
 import 'speech_control.dart';
 
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
 void main() => runApp(MyApp());
 
 
@@ -117,14 +119,26 @@ class _MyHomePageState extends State<MyHomePage> {
     final url = prefs.getString('hostURL');
 
     Dio dio = new Dio();
+    dio.options.connectTimeout = 3000;
+    dio.options.receiveTimeout = 3000;
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
         client.badCertificateCallback=(X509Certificate cert, String host, int port) {
           return true;
         };
     };
+    Response response;
     dio.post(url + '/input', data: body)
-      .then((Response response) {
-
+      .then((res) { response = res;})
+      .whenComplete(() {
+        if (response?.statusCode != 200) {
+          _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              content: new Text('Post text failed. (${url})'),
+              duration: new Duration(seconds: 5),
+              backgroundColor: Colors.red,
+            )
+          );
+        };
       });
   }
 
@@ -168,8 +182,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: speechControlButton(), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: speechControlButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      key: _scaffoldKey
     );
   }
 }

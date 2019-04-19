@@ -86,6 +86,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void readClipboard() async {
     final data = await Clipboard.getData('text/plain');
+    if (data?.text?.isEmpty ?? true) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: new Text('Clipboard is empty'),
+          duration: new Duration(seconds: 5),
+          backgroundColor: Colors.red,
+        )
+      );
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -133,12 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
         if (response?.statusCode != 200) {
           _scaffoldKey.currentState.showSnackBar(
             SnackBar(
-              content: new Text('Post text failed. (${url})'),
+              content: new Text('Post text failed. ($url)'),
               duration: new Duration(seconds: 5),
               backgroundColor: Colors.red,
             )
           );
-        };
+        }
       });
   }
 

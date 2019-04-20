@@ -31,7 +31,7 @@ dependencies:
   screen: ^0.0.5
   qrcode_reader: ^0.4.4
   speech_recognition:
-    git: git://github.com/alescdb/speech_recognition.git
+    git: git://github.com/kanata3249/speech_recognition.git
 
 dev_dependencies:
   flutter_test:

@@ -154,8 +154,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "3c73fbeb2b37065a3a95497820aa41d42960def4"
-      url: "git://github.com/alescdb/speech_recognition.git"
+      resolved-ref: de3b359403dbb414849d0b2a5be7e93a1aec1d36
+      url: "git://github.com/kanata3249/speech_recognition.git"
     source: git
     version: "0.2.0+1"
   stack_trace:

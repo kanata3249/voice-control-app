@@ -48,7 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     battery.onBatteryStateChanged.listen((BatteryState state) {
       bool keepScreenOn = (state != BatteryState.discharging);
+      Screen.isKeptOn.then((bool keepOn) {
+        if (keepOn != keepScreenOn) {
       Screen.keepOn(keepScreenOn);
+        }
+    });
     });
     speechControl.requestPermission();
     speechControl.init();

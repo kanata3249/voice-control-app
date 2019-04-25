@@ -14,7 +14,6 @@ final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 void main() => runApp(MyApp());
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -42,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var inputStringController = new TextEditingController();
   SpeechControl speechControl = new SpeechControl();
   bool _isMuted = true;
+  Dio dio;
 
   @override
   initState() {
@@ -50,9 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
       bool keepScreenOn = (state != BatteryState.discharging);
       Screen.isKeptOn.then((bool keepOn) {
         if (keepOn != keepScreenOn) {
-      Screen.keepOn(keepScreenOn);
+          Screen.keepOn(keepScreenOn);
         }
-    });
+      });
     });
     speechControl.requestPermission();
     speechControl.init();
@@ -60,6 +60,17 @@ class _MyHomePageState extends State<MyHomePage> {
       inputStringController.text = text;
       sendToHost();
     });
+
+    dio = new Dio();
+    dio.options.connectTimeout = 3000;
+    dio.options.receiveTimeout = 3000;
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) {
+        return true;
+      };
+    };
   }
 
   startSpeechRecognition() {
@@ -75,85 +86,69 @@ class _MyHomePageState extends State<MyHomePage> {
   speechControlButton() {
     if (!_isMuted) {
       return new FloatingActionButton(
-        onPressed: pauseSpeechRecognition,
-        tooltip: 'pause VoiceControl',
-        child: Icon(Icons.pause)
-      );
+          onPressed: pauseSpeechRecognition,
+          tooltip: 'pause VoiceControl',
+          child: Icon(Icons.pause));
     } else {
       return new FloatingActionButton(
-        onPressed: startSpeechRecognition,
-        tooltip: 'start VoiceControl',
-        child: Icon(Icons.record_voice_over)
-      );
+          onPressed: startSpeechRecognition,
+          tooltip: 'start VoiceControl',
+          child: Icon(Icons.record_voice_over));
     }
   }
 
   void readClipboard() async {
     final data = await Clipboard.getData('text/plain');
     if (data?.text?.isEmpty ?? true) {
-      _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: new Text('Clipboard is empty'),
-          duration: new Duration(seconds: 5),
-          backgroundColor: Colors.red,
-        )
-      );
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: new Text('Clipboard is empty'),
+        duration: new Duration(seconds: 5),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Input from clipboard'),
-          content: Text(data.text),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Send'),
-              onPressed: () {
-                inputStringController.text = data.text;
-                sendToHost();
-                Navigator.of(context).pop();
-              }
-            ),
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop()
-            )
-          ]
-        );
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text('Input from clipboard'),
+              content: Text(data.text),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text('Send'),
+                    onPressed: () {
+                      inputStringController.text = data.text;
+                      sendToHost();
+                      Navigator.of(context).pop();
+                    }),
+                FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.of(context).pop())
+              ]);
+        });
+  }
+
+  void showErrorMessage(String message, int duration) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: new Text(message),
+      duration: new Duration(seconds: duration),
+      backgroundColor: Colors.red,
+    ));
   }
 
   void sendToHost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final body = {
-      "data": this.inputStringController.text
-    };
+    final body = {"data": this.inputStringController.text};
     final url = prefs.getString('hostURL');
 
-    Dio dio = new Dio();
-    dio.options.connectTimeout = 3000;
-    dio.options.receiveTimeout = 3000;
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
-        client.badCertificateCallback=(X509Certificate cert, String host, int port) {
-          return true;
-        };
-    };
     Response response;
-    dio.post(url + '/input', data: body)
-      .then((res) { response = res;})
-      .whenComplete(() {
-        if (response?.statusCode != 200) {
-          _scaffoldKey.currentState.showSnackBar(
-            SnackBar(
-              content: new Text('Post text failed. ($url)'),
-              duration: new Duration(seconds: 5),
-              backgroundColor: Colors.red,
-            )
-          );
-        }
-      });
+    dio.post(url + '/input', data: body).then((Response res) {
+      response = res;
+    }).whenComplete(() {
+      if (response?.statusCode != 200) {
+        showErrorMessage('Post text failed. ($url)', 5);
+      }
+    });
   }
 
   @override
@@ -168,7 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => MyPreferencesPage()),
-            );            },
+              );
+            },
           )
         ],
       ),
@@ -183,13 +179,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       labelText: 'Input String',
                       border: OutlineInputBorder(),
                       suffixIcon: IconButton(
-                        icon: new Icon(MdiIcons.clipboardArrowLeftOutline),
-                        onPressed: readClipboard
-                      )
-                    ),
-                      
+                          icon: new Icon(MdiIcons.clipboardArrowLeftOutline),
+                          onPressed: readClipboard)),
                   controller: inputStringController,
-                  onSaved: (String value) => this.inputStringController.text = value,
+                  onSaved: (String value) =>
+                      this.inputStringController.text = value,
                 ),
               ),
             ],

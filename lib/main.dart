@@ -9,6 +9,7 @@ import 'package:screen/screen.dart';
 
 import 'preferences.dart';
 import 'speech_control.dart';
+import 'button_array.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var inputStringController = new TextEditingController();
   SpeechControl speechControl = new SpeechControl();
   bool _isMuted = true;
+  var buttons;
   Dio dio;
 
   @override
@@ -71,6 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return true;
       };
     };
+
+    loadButtonSetting();
   }
 
   startSpeechRecognition() {
@@ -151,48 +155,65 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void loadButtonSetting() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final url = prefs.getString('hostURL');
+    if (url == null) {
+      return;
+    }
+    Response response = await dio.get(url + '/buttons');
+    if (response?.statusCode == 200) {
+      setState(() => buttons = response.data);
+    } else {
+      showErrorMessage('Can\'t not load button settings ($url)', 5);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyPreferencesPage()),
-              );
-            },
-          )
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          child: Column(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      labelText: 'Input String',
-                      border: OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                          icon: new Icon(MdiIcons.clipboardArrowLeftOutline),
-                          onPressed: readClipboard)),
-                  controller: inputStringController,
-                  onSaved: (String value) =>
-                      this.inputStringController.text = value,
-                ),
-              ),
-            ],
-          ),
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyPreferencesPage()),
+                );
+              },
+            )
+          ],
         ),
-      ),
-      floatingActionButton: speechControlButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      key: _scaffoldKey
-    );
+        body: Column(children: [
+          Expanded(
+            child: ButtonArray(
+                buttonSettings: buttons,
+                onPressed: (action) {
+                  inputStringController.text = action;
+                  sendToHost();
+                }),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 16.0, left: 16.0, bottom: 90.0),
+            child: Form(
+              child: TextFormField(
+                decoration: InputDecoration(
+                    labelText: 'Input String',
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                        icon: new Icon(MdiIcons.clipboardArrowLeftOutline),
+                        onPressed: readClipboard)),
+                controller: inputStringController,
+                onSaved: (String value) =>
+                    this.inputStringController.text = value,
+              ),
+            ),
+          ),
+        ]),
+        floatingActionButton: speechControlButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        key: _scaffoldKey);
   }
 }

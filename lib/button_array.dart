@@ -24,8 +24,8 @@ class _ButtonArrayState extends State<ButtonArray>
   }
 
   void prepareTabContents() {
-    _tabs.clear();
-    _tabContents.clear();
+    _tabs = List<Tab>();
+    _tabContents = List<Widget>();
 
     for (var tab in widget.buttonSettings["tab"]) {
       List<Widget> buttons;

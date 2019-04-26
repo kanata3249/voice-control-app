@@ -27,11 +27,11 @@ class _ButtonArrayState extends State<ButtonArray>
     _tabs.clear();
     _tabContents.clear();
 
-    for (String tabName in widget.buttonSettings.keys) {
+    for (var tab in widget.buttonSettings["tab"]) {
       List<Widget> buttons;
 
-      _tabs.add(Tab(text: tabName));
-      buttons = widget.buttonSettings[tabName].map<Widget>((button) =>
+      _tabs.add(Tab(text: tab["label"]));
+      buttons = tab["buttons"].map<Widget>((button) =>
         Padding( padding: EdgeInsets.only(top: 12.0, right: 12.0, left: 12.0),
           child: OutlineButton(
             child: Text(button['label']),

@@ -161,12 +161,16 @@ class _MyHomePageState extends State<MyHomePage> {
     if (url == null) {
       return;
     }
-    Response response = await dio.get(url + '/buttons');
-    if (response?.statusCode == 200) {
-      setState(() => buttons = response.data);
-    } else {
-      showErrorMessage('Can\'t not load button settings ($url)', 5);
-    }
+    Response response;
+    dio.get(url + '/buttons').then ((Response res) {
+      response = res;
+    }).whenComplete(() {
+      if (response?.statusCode == 200) {
+        setState(() => buttons = response.data);
+     } else {
+       showErrorMessage('Can\'t not load button settings ($url)', 5);
+     }
+    });
   }
 
   @override

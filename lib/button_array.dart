@@ -55,7 +55,10 @@ class _ButtonArrayState extends State<ButtonArray>
   @override
   Widget build(BuildContext context) {
     if (widget.buttonSettings == null) {
-      return Text('Button settings not ready.');
+      return Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Text('Button settings empty.')
+      );
     }
     prepareTabContents();
     return Column(children: <Widget>[

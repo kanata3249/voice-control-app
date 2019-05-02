@@ -9,7 +9,10 @@ class SpeechControl {
   bool isMuted = true;
   bool isListening = false;
   String currentLocale;
+  String preferedLocale;
+  List<String> supportedLocales;
   Future future;
+  final String defaultLocale = "default";
 
   StringCallback onRecognitionCompleted = (String text) => {};
 
@@ -67,10 +70,17 @@ class SpeechControl {
         speechRecognitionAvailable = res;
       }
     );
+
+    speech.supportedLocales().then((locales) {
+      supportedLocales = locales;
+      supportedLocales.sort();
+      supportedLocales.insert(0, defaultLocale);
+    });
   }
 
   start() {
-    speech.listen(locale:currentLocale);
+    String locale = preferedLocale == defaultLocale ? currentLocale : preferedLocale;
+    speech.listen(locale: locale);
     isMuted = false;
   }
 

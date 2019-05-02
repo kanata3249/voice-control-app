@@ -44,10 +44,37 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isMuted = true;
   var buttons;
   Dio dio;
+  SharedPreferences _prefs;
 
   @override
   initState() {
     super.initState();
+
+    SharedPreferences.getInstance().then((prefs) {
+      _prefs = prefs;
+
+      speechControl.requestPermission();
+      speechControl.init();
+      speechControl.preferedLocale = prefs.getString("language") ?? speechControl.defaultLocale;
+      speechControl.setOnRecognitionCompletedCallback((String text) {
+        inputStringController.text = text;
+        sendToHost();
+      });
+
+      dio = new Dio();
+      dio.options.connectTimeout = 3000;
+      dio.options.receiveTimeout = 3000;
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+
+      loadButtonSetting();
+    });
+
     battery.onBatteryStateChanged.listen((BatteryState state) {
       bool keepScreenOn = (state != BatteryState.discharging);
       Screen.isKeptOn.then((bool keepOn) {
@@ -56,25 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
     });
-    speechControl.requestPermission();
-    speechControl.init();
-    speechControl.setOnRecognitionCompletedCallback((String text) {
-      inputStringController.text = text;
-      sendToHost();
-    });
-
-    dio = new Dio();
-    dio.options.connectTimeout = 3000;
-    dio.options.receiveTimeout = 3000;
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
-        return true;
-      };
-    };
-
-    loadButtonSetting();
   }
 
   startSpeechRecognition() {
@@ -141,9 +149,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void sendToHost() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     final body = {"data": this.inputStringController.text};
-    final url = prefs.getString('hostURL');
+    final url = _prefs.getString('hostURL');
 
     Response response;
     dio.post(url + '/input', data: body).then((Response res) {
@@ -155,9 +162,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void loadButtonSetting() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final url = prefs.getString('hostURL');
+  void loadButtonSetting() {
+    final url = _prefs.getString('hostURL');
     if (url == null) {
       return;
     }
@@ -190,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyPreferencesPage()),
+                  MaterialPageRoute(builder: (context) => MyPreferencesPage(speechControl: speechControl, prefs: _prefs)),
                 );
               },
             )

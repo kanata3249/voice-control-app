@@ -3,10 +3,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'speech_control.dart';
+import 'language-selector.dart';
+
 class MyPreferencesPage extends StatefulWidget {
-  MyPreferencesPage({Key key}) : super(key: key);
+  MyPreferencesPage({Key key, this.speechControl, this.prefs}) : super(key: key);
 
   final String title = 'Preferences';
+  final SpeechControl speechControl;
+  final SharedPreferences prefs;
 
   @override
   _MyPreferencesPageState createState() => _MyPreferencesPageState();
@@ -14,28 +19,31 @@ class MyPreferencesPage extends StatefulWidget {
 
 class _MyPreferencesPageState extends State<MyPreferencesPage> {
   var hostUrlController = new TextEditingController();
+  String _currentLanguage = "";
 
   @override
   initState() {
     super.initState();
-        loadPreferencesValue();
+    loadPreferencesValue();
   }
 
-  loadPreferencesValue() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  loadPreferencesValue() {
     setState(() {
-      hostUrlController.text = prefs.getString('hostURL');
+      hostUrlController.text = widget.prefs.getString('hostURL');
+      _currentLanguage = widget.prefs.getString('language');
+      _currentLanguage = _currentLanguage ?? widget.speechControl.preferedLocale;
     });
   }
 
-  savePreferencesValue() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  savePreferencesValue() {
     setState(() {
-      prefs.setString('hostURL', hostUrlController.text);
+      widget.prefs.setString('hostURL', hostUrlController.text);
+      widget.prefs.setString('language', _currentLanguage);
+      widget.speechControl.preferedLocale = _currentLanguage;
     });
   }
 
-  void scanQRCode() {
+  scanQRCode() {
     setState(() async {
       final data = await new QRCodeReader()
         .setForceAutoFocus(true) // default false
@@ -43,6 +51,10 @@ class _MyPreferencesPageState extends State<MyPreferencesPage> {
         .scan();
       hostUrlController.text = data;
     });
+  }
+
+  onLanguageChanged(String language) {
+    _currentLanguage = language;
   }
 
   @override
@@ -67,13 +79,19 @@ class _MyPreferencesPageState extends State<MyPreferencesPage> {
                 ),
                 controller: hostUrlController,
               ),
+              LanguageSelector(
+                currentLanguage: _currentLanguage,
+                languages: widget.speechControl.supportedLocales,
+                onChanged: onLanguageChanged
+               )
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          savePreferencesValue().then({Navigator.pop(context)})
+        onPressed: () {
+          savePreferencesValue();
+          Navigator.pop(context);
         },
         tooltip: 'Save',
         child: new Icon(Icons.check),

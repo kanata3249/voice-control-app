@@ -1,0 +1,87 @@
+{
+  "@@last_modified": "2019-05-03T04:12:46.886895",
+  "pause": "pause VoiceControl",
+  "@pause": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "start": "start VoiceControl",
+  "@start": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "send": "Send",
+  "@send": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "save": "Save",
+  "@save": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "clipboardEmpty": "Clipboard is empty",
+  "@clipboardEmpty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "inputText": "Input String",
+  "@inputText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "inputFromClipboard": "Input from clipboard",
+  "@inputFromClipboard": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendFailed": "Post text failed\nURL: {url}",
+  "@sendFailed": {
+    "type": "text",
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "loadButtonFailed": "Can't not load button settings\nURL: {url}",
+  "@loadButtonFailed": {
+    "type": "text",
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "emptyButtonSettings": "Button settings empty.",
+  "@emptyButtonSettings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "speechRecognitionLocale": "Speech recognition locale:",
+  "@speechRecognitionLocale": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preferencesTitle": "Preferences",
+  "@preferencesTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "applicationTitle": "Voice Control",
+  "@applicationTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "hostUrl": "Host URL",
+  "@hostUrl": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "defaultLocale": "default",
+  "@defaultLocale": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

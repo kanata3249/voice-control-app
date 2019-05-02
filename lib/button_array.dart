@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import 'messages.dart';
+
 class ButtonArray extends StatefulWidget {
   ButtonArray({Key key, this.buttonSettings, this.onPressed}) : super(key: key);
 
@@ -57,7 +59,7 @@ class _ButtonArrayState extends State<ButtonArray>
     if (widget.buttonSettings == null) {
       return Padding(
         padding: EdgeInsets.all(16.0),
-        child: Text('Button settings empty.')
+        child: Text(Messages.of(context).emptyButtonSettings)
       );
     }
     prepareTabContents();

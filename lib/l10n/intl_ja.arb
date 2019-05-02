@@ -1,0 +1,82 @@
+{
+  "@@last_modified": "2019-05-03T02:55:36.247129",
+  "pause": "音声入力開始",
+  "@pause": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "start": "音声入力停止",
+  "@start": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "send": "送信",
+  "@send": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "save": "保存",
+  "@save": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "clipboardEmpty": "クリップボードは空です",
+  "@clipboardEmpty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "inputText": "入力テキスト",
+  "@inputText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "inputFromClipboard": "クリップボードから入力",
+  "@inputFromClipboard": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendFailed": "送信失敗\nURL: {url}",
+  "@sendFailed": {
+    "type": "text",
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "loadButtonFailed": "ボタン設定の読込み失敗\nURL: {url}",
+  "@loadButtonFailed": {
+    "type": "text",
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "emptyButtonSettings": "ボタン設定なし",
+  "@emptyButtonSettings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "speechRecognitionLocale": "音声言語:",
+  "@speechRecognitionLocale": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "preferencesTitle": "設定",
+  "@preferencesTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "hostUrl": "ホストURL",
+  "@hostUrl": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "defaultLocale": "端末設定に従う",
+  "@defaultLocale": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

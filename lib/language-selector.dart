@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+import 'messages.dart';
+
 class LanguageSelector extends StatefulWidget {
   LanguageSelector({Key key, this.currentLanguage, this.languages, this.onChanged }) : super(key: key);
   
@@ -34,7 +36,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
       initiallyExpanded: false,
       title: Row(
         children: [
-          Text('Speech recognition locale:'),
+          Text(Messages.of(context).speechRecognitionLocale),
           Expanded(
             child: Text(_currentLanguage, textAlign: TextAlign.center )
           )

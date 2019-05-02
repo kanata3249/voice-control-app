@@ -74,7 +74,6 @@ class SpeechControl {
     speech.supportedLocales().then((locales) {
       supportedLocales = locales;
       supportedLocales.sort();
-      supportedLocales.insert(0, defaultLocale);
     });
   }
 

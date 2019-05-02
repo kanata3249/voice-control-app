@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:io';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:battery/battery.dart';
 import 'package:screen/screen.dart';
 
+import 'messages.dart';
 import 'preferences.dart';
 import 'speech_control.dart';
 import 'button_array.dart';
@@ -24,8 +26,30 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Voice Control'),
+      localizationsDelegates: [
+        const _MyLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('ja', ''),
+      ],
     );
   }
+}
+
+class _MyLocalizationsDelegate extends LocalizationsDelegate<Messages> {
+  const _MyLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => ['en','ja'].contains(locale.languageCode);
+
+  @override
+  Future<Messages> load(Locale locale) => Messages.load(locale);
+
+  @override
+  bool shouldReload(_MyLocalizationsDelegate old) => false;
 }
 
 class MyHomePage extends StatefulWidget {
@@ -99,12 +123,12 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!_isMuted) {
       return new FloatingActionButton(
           onPressed: pauseSpeechRecognition,
-          tooltip: 'pause VoiceControl',
+          tooltip: Messages.of(context).pause,
           child: Icon(Icons.pause));
     } else {
       return new FloatingActionButton(
           onPressed: startSpeechRecognition,
-          tooltip: 'start VoiceControl',
+          tooltip: Messages.of(context).start,
           child: Icon(Icons.record_voice_over));
     }
   }
@@ -113,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final data = await Clipboard.getData('text/plain');
     if (data?.text?.isEmpty ?? true) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: new Text('Clipboard is empty'),
+        content: new Text(Messages.of(context).clipboardEmpty),
         duration: new Duration(seconds: 5),
         backgroundColor: Colors.red,
       ));
@@ -123,18 +147,18 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text('Input from clipboard'),
+              title: Text(Messages.of(context).inputFromClipboard),
               content: Text(data.text),
               actions: <Widget>[
                 FlatButton(
-                    child: Text('Send'),
+                    child: Text(Messages.of(context).send),
                     onPressed: () {
                       inputStringController.text = data.text;
                       sendToHost();
                       Navigator.of(context).pop();
                     }),
                 FlatButton(
-                    child: Text('Cancel'),
+                    child: Text(Messages.of(context).cancel),
                     onPressed: () => Navigator.of(context).pop())
               ]);
         });
@@ -157,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
       response = res;
     }).whenComplete(() {
       if (response?.statusCode != 200) {
-        showErrorMessage('Post text failed. ($url)', 5);
+        showErrorMessage(Messages.of(context).sendFailed(url), 5);
       }
     });
   }
@@ -174,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (response?.statusCode == 200) {
         setState(() => buttons = response.data);
      } else {
-       showErrorMessage('Can\'t not load button settings ($url)', 5);
+       showErrorMessage(Messages.of(context).loadButtonFailed(url), 5);
      }
     });
   }
@@ -183,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(Messages.of(context).applicationTitle),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.refresh),
@@ -216,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Form(
               child: TextFormField(
                 decoration: InputDecoration(
-                    labelText: 'Input String',
+                    labelText: Messages.of(context).inputText,
                     border: OutlineInputBorder(),
                     suffixIcon: IconButton(
                         icon: new Icon(MdiIcons.clipboardArrowLeftOutline),

@@ -301,7 +301,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8d45cc6b637923df9c4f857b98a27e247cf106d0"
+      resolved-ref: "4edcc365e09a0e83a9f267e0a503ce5c1b31e339"
       url: "git://github.com/kanata3249/speech_recognition.git"
     source: git
     version: "0.2.0+1"

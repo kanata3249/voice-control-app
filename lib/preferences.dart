@@ -80,17 +80,23 @@ class _MyPreferencesPageState extends State<MyPreferencesPage> {
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                    labelText: Messages.of(context).hostUrl,
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: new Icon(MdiIcons.qrcodeScan),
-                      onPressed: scanQRCode
-                    )
+                  labelText: Messages.of(context).hostUrl,
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(MdiIcons.qrcodeScan),
+                    onPressed: scanQRCode
+                  )
                 ),
                 controller: hostUrlController,
               ),
+              Padding( padding: EdgeInsets.all(8.0) ),
               LanguageSelector(
                 currentLanguage: _currentLanguage == widget.speechControl.defaultLocale ? _supportedLanguages[0] : _currentLanguage,
+                decoration: InputDecoration(
+                  labelText: Messages.of(context).speechRecognitionLocale,
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0)
+                ),
                 languages: _supportedLanguages,
                 onChanged: onLanguageChanged
                )

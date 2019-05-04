@@ -1,7 +1,8 @@
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'dart:io';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
@@ -69,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var buttons;
   Dio dio;
   SharedPreferences _prefs;
+  Timer _clearInputStringTimer;
 
   @override
   initState() {
@@ -82,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
       speechControl.preferedLocale = prefs.getString("language") ?? speechControl.defaultLocale;
       speechControl.setOnRecognitionCompletedCallback((String text) {
         inputStringController.text = text;
-        sendToHost();
+        sendToHost(text);
       });
 
       dio = new Dio();
@@ -154,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(Messages.of(context).send),
                     onPressed: () {
                       inputStringController.text = data.text;
-                      sendToHost();
+                      sendToHost(data.text);
                       Navigator.of(context).pop();
                     }),
                 FlatButton(
@@ -172,15 +174,22 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 
-  void sendToHost() async {
-    final body = {"data": this.inputStringController.text};
+  void clearInputStringWithDelay( Duration duration ) {
+    _clearInputStringTimer?.cancel();
+    _clearInputStringTimer = Timer(duration, () => this.inputStringController.text = "");
+  }
+
+  void sendToHost(String text) async {
+    final body = {"data": text};
     final url = _prefs.getString('hostURL');
 
     Response response;
     dio.post(url + '/input', data: body).then((Response res) {
       response = res;
     }).whenComplete(() {
-      if (response?.statusCode != 200) {
+      if (response?.statusCode == 200) {
+        clearInputStringWithDelay(Duration(milliseconds: 500));
+      } else {
         showErrorMessage(Messages.of(context).sendFailed(url), 5);
       }
     });
@@ -232,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 buttonSettings: buttons,
                 onPressed: (action) {
                   inputStringController.text = action;
-                  sendToHost();
+                  sendToHost(action);
                 }),
           ),
           Padding(
@@ -246,8 +255,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         icon: new Icon(MdiIcons.clipboardArrowLeftOutline),
                         onPressed: readClipboard)),
                 controller: inputStringController,
-                onSaved: (String value) =>
-                    this.inputStringController.text = value,
+                onFieldSubmitted: (String value) {
+                  this.inputStringController.text = value;
+                  sendToHost(value);
+                }
               ),
             ),
           ),

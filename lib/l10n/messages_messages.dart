@@ -24,7 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "applicationTitle" : MessageLookupByLibrary.simpleMessage("Voice Control"),
+    "applicationTitle" : MessageLookupByLibrary.simpleMessage("PC voice command"),
     "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "clipboardEmpty" : MessageLookupByLibrary.simpleMessage("Clipboard is empty"),
     "defaultLocale" : MessageLookupByLibrary.simpleMessage("default"),

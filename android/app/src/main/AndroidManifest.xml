@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="voice_control_app"
+        android:label="PC voice command"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

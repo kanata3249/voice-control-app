@@ -34,7 +34,7 @@ class Messages {
   String get emptyButtonSettings => Intl.message('Button settings empty.', name: "emptyButtonSettings");
   String get speechRecognitionLocale => Intl.message('Speech recognition locale:', name: "speechRecognitionLocale");
   String get preferencesTitle => Intl.message('Preferences', name: "preferencesTitle");
-  String get applicationTitle => Intl.message('Voice Control', name: "applicationTitle");
+  String get applicationTitle => Intl.message('PC voice command', name: "applicationTitle");
   String get hostUrl => Intl.message('Host URL', name: "hostUrl");
   String get defaultLocale => Intl.message('default', name: "defaultLocale");
 }

@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Voice Control',
+      title: 'PC voice command',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Voice Control'),
+      home: MyHomePage(title: 'PC voice command'),
       localizationsDelegates: [
         const _MyLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

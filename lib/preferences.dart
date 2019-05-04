@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'messages.dart';
@@ -45,14 +46,22 @@ class _MyPreferencesPageState extends State<MyPreferencesPage> {
     });
   }
 
-  scanQRCode() {
-    setState(() async {
+  scanQRCode() async {
+    final Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.camera]);
+//    if (permissions[PermissionGroup.microphone] == PermissionStatus.deniedNeverAsk) {
+//      SimplePermissions.openSettings();
+//    }
+
+
+    if (permissions[PermissionGroup.camera] == PermissionStatus.granted) {
       final data = await new QRCodeReader()
         .setForceAutoFocus(true) // default false
         .setTorchEnabled(true) // default false
         .scan();
-      hostUrlController.text = data;
-    });
+      setState(() {
+        hostUrlController.text = data;
+      });
+    }
   }
 
   onLanguageChanged(String language) {

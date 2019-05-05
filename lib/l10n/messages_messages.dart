@@ -35,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "loadButtonFailed" : m0,
     "pause" : MessageLookupByLibrary.simpleMessage("pause VoiceControl"),
     "preferencesTitle" : MessageLookupByLibrary.simpleMessage("Preferences"),
+    "privacyPolicyLabel" : MessageLookupByLibrary.simpleMessage("About privacy policy..."),
+    "privacyPolicyURL" : MessageLookupByLibrary.simpleMessage("https://github.com/kanata3249/voice_control_app/blob/master/PRIVACYPOLICY.md"),
     "save" : MessageLookupByLibrary.simpleMessage("Save"),
     "send" : MessageLookupByLibrary.simpleMessage("Send"),
     "sendFailed" : m1,

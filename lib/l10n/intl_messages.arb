@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-05-03T04:12:46.886895",
+  "@@last_modified": "2019-05-06T04:00:04.306204",
   "pause": "pause VoiceControl",
   "@pause": {
     "type": "text",
@@ -81,6 +81,16 @@
   },
   "defaultLocale": "default",
   "@defaultLocale": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "privacyPolicyURL": "https://github.com/kanata3249/voice_control_app/blob/master/PRIVACYPOLICY.md",
+  "@privacyPolicyURL": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "privacyPolicyLabel": "About privacy policy...",
+  "@privacyPolicyLabel": {
     "type": "text",
     "placeholders": {}
   }

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'messages.dart';
 import 'speech_control.dart';
@@ -108,7 +109,29 @@ class _MyPreferencesPageState extends State<MyPreferencesPage> {
                 ),
                 languages: _supportedLanguages,
                 onChanged: onLanguageChanged
-               )
+              ),
+              Expanded(
+                child: Padding(padding: EdgeInsets.all(0.0))
+              ),
+              Padding(
+                padding: EdgeInsets.only( bottom: 20.0, left: 5.0 ),
+                child: Row(
+                  children: [
+                    InkWell(
+                      child: Text(
+                        Messages.of(context).privacyPolicyLabel,
+                        style: TextStyle(decoration: TextDecoration.underline, fontSize: 16.0, color: Colors.blue)
+                      ),
+                      onTap: () async {
+                        final String url = Messages.of(context).privacyPolicyURL;
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        }
+                      }
+                    ),
+                  ]
+                )
+              )
             ],
           ),
         ),

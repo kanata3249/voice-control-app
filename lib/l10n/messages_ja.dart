@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "loadButtonFailed" : m0,
     "pause" : MessageLookupByLibrary.simpleMessage("音声入力開始"),
     "preferencesTitle" : MessageLookupByLibrary.simpleMessage("設定"),
+    "privacyPolicyLabel" : MessageLookupByLibrary.simpleMessage("プライバシーポリシーについて"),
     "save" : MessageLookupByLibrary.simpleMessage("保存"),
     "send" : MessageLookupByLibrary.simpleMessage("送信"),
     "sendFailed" : m1,

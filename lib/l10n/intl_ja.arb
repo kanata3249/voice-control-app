@@ -78,5 +78,10 @@
   "@defaultLocale": {
     "type": "text",
     "placeholders": {}
+  },
+  "privacyPolicyLabel": "プライバシーポリシーについて",
+  "@defaultLocale": {
+    "type": "text",
+    "placeholders": {}
   }
 }

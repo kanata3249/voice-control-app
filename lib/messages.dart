@@ -37,4 +37,6 @@ class Messages {
   String get applicationTitle => Intl.message('PC voice command', name: "applicationTitle");
   String get hostUrl => Intl.message('Host URL', name: "hostUrl");
   String get defaultLocale => Intl.message('default', name: "defaultLocale");
+  String get privacyPolicyURL => Intl.message('https://github.com/kanata3249/voice_control_app/blob/master/PRIVACYPOLICY.md', name: "privacyPolicyURL");
+  String get privacyPolicyLabel => Intl.message('About privacy policy...', name: "privacyPolicyLabel");
 }
